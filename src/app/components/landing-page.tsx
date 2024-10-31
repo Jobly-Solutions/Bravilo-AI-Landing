@@ -247,7 +247,7 @@ export default function Component() {
             </h2>
             <div className="max-w-4xl mx-auto bg-black/40 border border-gray-800/50 rounded-lg overflow-hidden">
               <div className="aspect-w-16 aspect-h-9">
-              <iframe width="1104" height="621" src="https://www.youtube.com/embed/-NkVS2l66Zs" title="Train a custom GPT Agent on custom data in 1 minute ⚡️with Chaindesk.ai"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" className="w-full h-full"></iframe>
+              <iframe width="1104" height="621" src="https://www.youtube.com/embed/-NkVS2l66Zs" title="Train a custom GPT Agent on custom data in 1 minute ⚡️with Chaindesk.ai"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" className="w-full"></iframe>
               </div>
             </div>
             <div className="mt-12 grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
