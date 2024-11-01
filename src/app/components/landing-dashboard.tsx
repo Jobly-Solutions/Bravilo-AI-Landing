@@ -1,14 +1,65 @@
 'use client'
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Bot, Cpu, Sparkles, MessageSquare, Zap, ArrowRight, ExternalLink, Shield, Code, Check, Star, Play } from "lucide-react"
+import { 
+  Bot, 
+  Cpu, 
+  Sparkles, 
+  MessageSquare, 
+  Zap, 
+  ArrowRight, 
+  ExternalLink, 
+  Shield, 
+  Code, 
+  Check, 
+  Star, 
+  Play,
+  Inbox,
+  Database,
+  FileText,
+  BarChart2,
+  Mail,
+  Users,
+  Settings,
+  FileCode2,
+  Search,
+  Plus,
+  MoreHorizontal
+} from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+const sidebarItems = [
+  { icon: Inbox, label: 'Inbox', count: 3 },
+  { icon: Bot, label: 'Agents', active: true },
+  { icon: Database, label: 'Datastores' },
+  { icon: FileText, label: 'Forms' },
+  { icon: BarChart2, label: 'Analytics' },
+  { icon: Mail, label: 'Email Inboxes' },
+  { icon: Users, label: 'Contacts' },
+  { icon: Settings, label: 'Settings' },
+  { icon: FileCode2, label: 'Documentation' },
+]
 
 export default function Component() {
+  const [showDashboard, setShowDashboard] = useState(false)
+  const [expandedAgent, setExpandedAgent] = useState<string | null>(null)
+
+  const toggleDashboard = () => setShowDashboard(!showDashboard)
+  const toggleAgent = (name: string) => setExpandedAgent(expandedAgent === name ? null : name)
+
   return (
     <div className="flex flex-col min-h-screen bg-[#000304]">
       {/* Announcement Banner */}
@@ -36,8 +87,8 @@ export default function Component() {
                 <Image
                   src="/logo-simple.png"
                   alt="Bravilo Logo"
-                  width={500}
-                  height={500}
+                  width={32}
+                  height={32}
                   className="w-8 h-8"
                 />
                 <span className="text-white font-bold text-xl">Bravilo</span>
@@ -180,6 +231,124 @@ export default function Component() {
                   <span className="text-[#00B7D4]">🚀</span>
                   <span>Configuración en 2 minutos</span>
                 </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Interactive Dashboard Section */}
+        <section className="py-20 border-t border-gray-800/50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
+              Experimenta el poder de Bravilo
+            </h2>
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Card className="bg-black/40 border-gray-800/50 p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-2xl font-bold text-white">Dashboard de Agentes</h3>
+                    <Button 
+                      onClick={toggleDashboard}
+                      className="bg-[#00B7D4] hover:bg-[#00B7D4]/90 text-white"
+                    >
+                      {showDashboard ? "Ocultar Dashboard" : "Mostrar Dashboard"}
+                    </Button>
+                  </div>
+                  <AnimatePresence>
+                    {showDashboard && (
+                      
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="flex">
+                          {/* Sidebar */}
+                          <aside className="w-64 border-r border-gray-800 pr-4">
+                            <nav className="space-y-1">
+                              {sidebarItems.map((item) => (
+                                <Link
+                                  key={item.label}
+                                  href="#"
+                                  className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                                    item.active 
+                                      ? 'bg-[#00B7D4]/10 text-[#00B7D4]' 
+                                      : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
+                                  }`}
+                                >
+                                  <item.icon className="w-5 h-5" />
+                                  <span>{item.label}</span>
+                                  {item.count && (
+                                    <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                                      {item.count}
+                                    </span>
+                                  )}
+                                </Link>
+                              ))}
+                            </nav>
+                          </aside>
+
+                          {/* Main Content */}
+                          <main className="flex-1 pl-6">
+                            <div className="mb-6">
+                              <h4 className="text-lg font-semibold text-white mb-4">Resumen de Agentes</h4>
+                              <div className="grid grid-cols-2 gap-4">
+                                {[
+                                  { label: "Agentes Activos", value: "5" },
+                                  { label: "Conversaciones Totales", value: "1,234" },
+                                  { label: "Tasa de Satisfacción", value: "98%" },
+                                  { label: "Tiempo de Respuesta Promedio", value: "5s" },
+                                ].map((stat, index) => (
+                                  <Card key={index} className="bg-gray-900/50 border-gray-800/50 p-4">
+                                    <p className="text-sm text-gray-400">{stat.label}</p>
+                                    <p className="text-2xl font-bold text-white">{stat.value}</p>
+                                  </Card>
+                                ))}
+                              </div>
+                            </div>
+                            <div className="rounded-lg border border-gray-800 overflow-hidden">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead className="text-gray-400">Nombre</TableHead>
+                                    <TableHead className="text-gray-400">Descripción</TableHead>
+                                    <TableHead className="text-gray-400">Modelo</TableHead>
+                                    <TableHead className="text-gray-400">Visibilidad</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {[
+                                    { name: "Asistente de Ventas", description: "Optimiza el proceso de ventas", model: "GPT-4", visibility: "Público" },
+                                    { name: "Soporte Técnico", description: "Resuelve problemas técnicos", model: "GPT-3.5", visibility: "Privado" },
+                                    { name: "Onboarding", description: "Guía a nuevos usuarios", model: "GPT-4", visibility: "Público" },
+                                  ].map((agent, index) => (
+                                    <TableRow key={index} className="border-gray-800">
+                                      <TableCell className="font-medium text-white">{agent.name}</TableCell>
+                                      <TableCell className="text-gray-400">{agent.description}</TableCell>
+                                      <TableCell className="text-gray-400">{agent.model}</TableCell>
+                                      <TableCell>
+                                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                          agent.visibility === "Público" ? "bg-green-500/10 text-green-500" : "bg-yellow-500/10 text-yellow-500"
+                                        }`}>
+                                          {agent.visibility}
+                                        </span>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </main>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Card>
               </motion.div>
             </div>
           </div>
@@ -382,87 +551,73 @@ export default function Component() {
           </div>
         </section>
 
-
-        
-{/* Pricing Section */}
-<section id="precios" className="py-20 border-t border-gray-800/50 bg-black/50">
-  <div className="container mx-auto px-4">
-    <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
-      Planes flexibles para cada necesidad
-    </h2>
-    <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-      {[
-        {
-          name: "Básico",
-          price: "49",
-          features: [
-            "1 agente de IA",
-            "10,000 consultas/mes",
-            "Soporte por email",
-            "Integraciones básicas",
-            "Almacenamiento de hasta 30,000,000 palabras",
-            "Carga de archivos limitada a 10 MB",
-            "Hasta 1 usuario incluido"
-          ]
-        },
-        {
-          name: "Pro",
-          price: "149",
-          features: [
-            "5 agentes de IA",
-            "100,000 consultas/mes",
-            "Soporte prioritario",
-            "Todas las integraciones",
-            "Almacenamiento de hasta 100,000,000 palabras",
-            "Carga de archivos limitada a 20 MB",
-            "Sincronización automática de datos",
-            "Hasta 25 usuarios incluidos"
-          ],
-          highlighted: true
-        },
-        {
-          name: "Enterprise",
-          price: "499",
-          features: [
-            "20 agentes de IA",
-            "500,000 consultas/mes",
-            "Soporte 24/7",
-            "Integraciones avanzadas y personalización",
-            "Almacenamiento de hasta 500,000,000 palabras",
-            "Carga de archivos limitada a 50 MB",
-            "Sincronización de datos en tiempo real",
-            "Onboarding personalizado",
-            "Hasta 100 usuarios incluidos"
-          ]
-        }
-      ].map((plan, i) => (
-        <Card 
-          key={i} 
-          className={`bg-black/40 border-gray-800/50 p-6 ${plan.highlighted ? 'border-[#00B7D4] shadow-[0_0_30px_rgba(0,183,212,0.2)]' : ''}`}
-        >
-          <h3 className="text-2xl font-bold text-white mb-4">{plan.name}</h3>
-          <div className="mb-6">
-            <span className="text-4xl font-bold text-white">${plan.price}</span>
-            <span className="text-gray-400">/mes</span>
+        {/* Pricing Section */}
+        <section id="precios" className="py-20 border-t border-gray-800/50 bg-black/50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
+              Planes flexibles para cada necesidad
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              {[
+                {
+                  name: "Básico",
+                  price: "49",
+                  features: [
+                    "1 agente de IA",
+                    "1,000 conversaciones/mes",
+                    "Soporte por email",
+                    "Integraciones básicas"
+                  ]
+                },
+                {
+                  name: "Pro",
+                  price: "149",
+                  features: [
+                    "5 agentes de IA",
+                    "10,000 conversaciones/mes",
+                    "Soporte prioritario",
+                    "Todas las integraciones",
+                    "Análisis avanzados"
+                  ],
+                  highlighted: true
+                },
+                {
+                  name: "Empresa",
+                  price: "Personalizado",
+                  features: [
+                    "Agentes ilimitados",
+                    "Conversaciones ilimitadas",
+                    "Soporte 24/7",
+                    "Integraciones personalizadas",
+                    "Implementación dedicada"
+                  ]
+                }
+              ].map((plan, i) => (
+                <Card 
+                  key={i} 
+                  className={`bg-black/40 border-gray-800/50 p-6 ${plan.highlighted ? 'border-[#00B7D4] shadow-[0_0_30px_rgba(0,183,212,0.2)]' : ''}`}
+                >
+                  <h3 className="text-2xl font-bold text-white mb-4">{plan.name}</h3>
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold text-white">${plan.price}</span>
+                    {plan.price !== "Personalizado" && <span className="text-gray-400">/mes</span>}
+                  </div>
+                  <ul className="mb-6 space-y-2">
+                    {plan.features.map((feature, j) => (
+                      <li key={j} className="flex items-center text-gray-300">
+                        <Check className="w-5 h-5 mr-2 text-[#00B7D4]" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button className="w-full bg-[#00B7D4] hover:bg-[#00B7D4]/90 text-white">
+                    {plan.price === "Personalizado" ? "Contactar ventas" : "Comenzar ahora"}
+                  </Button>
+                </Card>
+              ))}
+            </div>
           </div>
-          <ul className="mb-6 space-y-2">
-            {plan.features.map((feature, j) => (
-              <li key={j} className="flex items-center text-gray-300">
-                <Check className="w-5 h-5 mr-2 text-[#00B7D4]" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <Button className="w-full bg-[#00B7D4] hover:bg-[#00B7D4]/90 text-white">
-            {plan.price === "499" ? "Contactar ventas" : "Comenzar ahora"}
-          </Button>
-        </Card>
-      ))}
-    </div>
-  </div>
-</section>
-
-
+        </section>
 
         {/* FAQ Section */}
         <section className="py-20 border-t border-gray-800/50">
@@ -537,11 +692,11 @@ export default function Component() {
             <div>
               <Link href="/" className="flex items-center gap-2 mb-4">
                 <Image
-                  src="/logo-simple-bravilo.png"
+                  src="/logo-simple.png"
                   alt="Bravilo Logo"
-                  width={500}
-                  height={500}
-                  style={{ width: '90px', height: 'auto' }} 
+                  width={32}
+                  height={32}
+                  className="w-8 h-8"
                 />
                 <span className="text-white font-bold text-xl">Bravilo</span>
               </Link>
